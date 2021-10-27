@@ -4,10 +4,21 @@ pattern.json
 {
   "patterns":[
       {
-          "url":"watana.be/",
+          "url":"https://www.mozilla.org/ja/",
+          "type":"class",
+          "id":"c-fxpromo-title",
+          "png":"firefoxaddon.png",
+          "keyCode":"Escape",
+          "shift":true,
+          "alt":false,
+          "ctrl":false,
+          "meta":false
+      },
+      {
+          "url":"https://www.google.com/",
           "type":"id",
-          "id":"masthead",
-          "png":"captureitem.png",
+          "id":"ctaCanvas",
+          "png":"google.png",
           "keyCode":"Escape",
           "shift":true,
           "alt":false,
@@ -23,4 +34,3 @@ id: element id
 png: save file name(png)
 keyCode: trigger key
 shift,alt,ctrl,meta: required modifier
-

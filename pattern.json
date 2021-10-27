@@ -1,10 +1,10 @@
 {
   "patterns":[
       {
-          "url":"shoot.watana.be/",
-          "type":"id",
-          "id":"masthead",
-          "png":"extest2.png",
+          "url":"https://www.mozilla.org/ja/",
+          "type":"class",
+          "id":"c-fxpromo-title",
+          "png":"firefoxaddon.png",
           "keyCode":"Escape",
           "shift":true,
           "alt":false,
@@ -12,10 +12,10 @@
           "meta":false
       },
       {
-          "url":"https://vdata.nikkei.com/newsgraphics/coronavirus-japan-vaccine-status/",
-          "type":"class",
-          "id":"c-media c-card__media",
-          "png":"vaccination.png",
+          "url":"https://www.google.com/",
+          "type":"id",
+          "id":"ctaCanvas",
+          "png":"google.png",
           "keyCode":"Escape",
           "shift":true,
           "alt":false,
