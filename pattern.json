@@ -1,0 +1,26 @@
+{
+  "patterns":[
+      {
+          "url":"shoot.watana.be/",
+          "type":"id",
+          "id":"masthead",
+          "png":"extest2.png",
+          "keyCode":"Escape",
+          "shift":true,
+          "alt":false,
+          "ctrl":false,
+          "meta":false
+      },
+      {
+          "url":"https://vdata.nikkei.com/newsgraphics/coronavirus-japan-vaccine-status/",
+          "type":"class",
+          "id":"c-media c-card__media",
+          "png":"vaccination.png",
+          "keyCode":"Escape",
+          "shift":true,
+          "alt":false,
+          "ctrl":false,
+          "meta":false
+      }
+  ]
+}
