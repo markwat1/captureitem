@@ -1,0 +1,28 @@
+{
+  "patterns":[
+      {
+          "url":"https://www.mozilla.org/ja/",
+          "type":"class",
+          "id":"c-fxpromo-title",
+          "class_index":0,
+          "png":"firefox.png",
+          "keyCode":"Escape",
+          "shift":true,
+          "alt":false,
+          "ctrl":false,
+          "meta":false
+      },
+      {
+          "url":"https://toyokeizai.net/sp/visual/tko/covid19/",
+          "type":"class",
+          "id":"box transition nationwide",
+          "class_index":0,
+          "png":"toyokeizai.png",
+          "keyCode":"Escape",
+          "shift":true,
+          "alt":false,
+          "ctrl":false,
+          "meta":false
+      }
+  ]
+}
