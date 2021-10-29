@@ -1,55 +1,48 @@
 //console.log("Start content script");
-let findBy = '';
-let id = '';
+let patterns;
 let png = 'capture.png';
-let keyCode = 'Escape';
-let shift = true;
-let alt = false;
-let ctrl = false;
-let meta = false;
+let defaultPatterns =
+'{\n\
+  "patterns":[\n\
+      {\n\
+          "url":"https://www.mozilla.org/ja/",\n\
+          "type":"class",\n\
+          "id":"c-fxpromo-title",\n\
+          "class_index":0,\n\
+          "png":"firefox.png",\n\
+          "keyCode":"Escape",\n\
+          "shift":true,\n\
+          "alt":false,\n\
+          "ctrl":false,\n\
+          "meta":false\n\
+      }\n\
+  ]\n\
+}\n';
 
-function setup(){
-//    console.log("addEventListener");
-    window.addEventListener("keydown", onKeyDown);
-}
+window.addEventListener("keydown", onKeyDown);
 
 //document.body.style.border = "5px solid red";
 browser.runtime.onMessage.addListener(messageListener);
 var getting = browser.storage.local.get('pattern');
 getting.then((res) => {
-//    console.log(res.pattern);
-    let pat = JSON.parse(res.pattern);
-    for(var p in pat.patterns){
-//        console.log(pat.patterns[p]);
-        let urlpat = new RegExp(pat.patterns[p].url);
-        if(urlpat.test(document.URL)){
-//            console.log("pattern match:" + pat.patterns[p].url);
-            findBy = pat.patterns[p].type;
-            id = pat.patterns[p].id;
-            png = pat.patterns[p].png;
-            keyCode = pat.patterns[p].keyCode;
-            shift = pat.patterns[p].shift;
-            alt = pat.patterns[p].alt;
-            ctrl = pat.patterns[p].ctrl;
-            meta = pat.patterns[p].meta;
-            setup();
-            break;
-        }
+    let pattern = res.pattern;
+    if(res.pattern == undefined){
+        pattern = defaultPatterns;
     }
-    if(findBy == ''){
-//        console.log("Not Match");
-    }
+    let pat = JSON.parse(pattern);
+    patterns = pat.patterns;
 });
 
 function messageListener(message){
     if(message.type == "image"){
-//        console.log("Download Image");
         let elem = document.createElement("a");
         elem.href = message.uri;
         elem.download = png;
         elem.click();
     }else{
-        console.log("Message  " + message);
+        if(message.type == "error"){
+            console.log(`Message: ${message.message}`);
+        }
     }
 }
 
@@ -65,42 +58,60 @@ function getOffset(elem){
     return {left:offsetX,top:offsetY};
 }
 
-//console.log("onKeyDown");
-
 function onKeyDown(e) {
-//    console.log("KeyDown :" + e.code);
-    if( e.code == keyCode &&
-        e.shiftKey == shift &&
-        e.altKey == alt &&
-        e.ctrlKey == ctrl &&
-        e.metaKey == meta
-      ) {
-        let elem;
-        switch(findBy){
-        case 'id':
-//            console.log("get Element ById");
-            elem = document.getElementById(id);
-            break;
-        case 'class':
-//            console.log("get Element ByClassName");
-            elem = document.getElementsByClassName(id)[0];
-            break;
+    let findBy = '';
+    let id = '';
+    let keyCode = 'Escape';
+    let shift = true;
+    let alt = false;
+    let ctrl = false;
+    let meta = false;
+    let class_index = 0;
+    for(var p in patterns){
+        let urlpat = new RegExp(patterns[p].url);
+        if(urlpat.test(document.URL)){
+            findBy = patterns[p].type;
+            id = patterns[p].id;
+            if(patterns[p].class_index){
+                class_index = patterns[p].class_index;
+            }
+            png = patterns[p].png;
+            keyCode = patterns[p].keyCode;
+            shift = patterns[p].shift;
+            alt = patterns[p].alt;
+            ctrl = patterns[p].ctrl;
+            meta = patterns[p].meta;
+            if( e.code == keyCode &&
+                e.shiftKey == shift &&
+                e.altKey == alt &&
+                e.ctrlKey == ctrl &&
+                e.metaKey == meta
+              ) {
+                let elem;
+                switch(findBy){
+                case 'id':
+                    elem = document.getElementById(id);
+                    break;
+                case 'class':
+                    elem = document.getElementsByClassName(id)[class_index];
+                    break;
+                }
+                let offset = getOffset(elem);
+                let width = elem.offsetWidth;
+                if(width == 0){
+                    width = 500;
+                }
+                let height = elem.offsetHeight;
+                if(elem.offsetHeight == 0){
+                    height = 500;
+                }
+                var sending = browser.runtime.sendMessage({rect:{x:offset.left,y:offset.top,width:width,height:height}});
+                sending.then(messageListener, onError);
+                break;
+            }
         }
-        let offset = getOffset(elem);
-        let width = elem.offsetWidth;
-        if(width == 0){
-            width = 500;
-        }
-        let height = elem.offsetHeight;
-        if(elem.offsetHeight == 0){
-            height = 500;
-        }
-//        console.log(`Rect:(${offset.left},${offset.top},${width},${height})`);
-        var sending = browser.runtime.sendMessage({rect:{x:offset.left,y:offset.top,width:width,height:height}});
-        sending.then(messageListener, onError);
     }
 }
-
 
 function onError(error) {
     console.log(`Error: ${error}`);

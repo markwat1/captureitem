@@ -7,14 +7,14 @@ function onCaptured(imageUri) {
 }
 
 function onError(error) {
-    browser.tabs.sendMessage(tabId,{message:"onError"});
+    browser.tabs.sendMessage(tabId,{type:"error",message:"capturing Error"});
 }
 
 function notify(message, sender, sendResponse){
+    tabId = sender.tab.id;
     responseFunc = sendResponse;
     var capturing = browser.tabs.captureTab(message);
     capturing.then(onCaptured, onError);
-    tabId = sender.tab.id;
     sendResponse({message:"Capturing"});
 }
 

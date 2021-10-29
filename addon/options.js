@@ -21,6 +21,7 @@ let defaultPatterns =
           "url":"https://www.mozilla.org/ja/",\n\
           "type":"class",\n\
           "id":"c-fxpromo-title",\n\
+          "class_index":0,\n\
           "png":"firefox.png",\n\
           "keyCode":"Escape",\n\
           "shift":true,\n\
