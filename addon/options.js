@@ -4,6 +4,11 @@ function onStored(res){
 
 function saveOptions(e) {
     let pattern = document.getElementById("pattern").value;
+    try{
+        JSON.parse(pattern);
+    } catch (e){
+        alert("JSON Error:" + e.message);
+    }
     let setting = browser.storage.local.set({
         'pattern':pattern
     });
