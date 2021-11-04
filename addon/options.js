@@ -5,10 +5,23 @@ function onStored(res){
 function saveOptions(e) {
     let pattern = document.getElementById("pattern").value;
     try{
-        JSON.parse(pattern);
+        let pat = JSON.parse(pattern).patterns;
+        for(var p in pat){
+            if(pat[p].url == void 0){
+                alert("URL Regular Expression required");
+            }
+            let urlre = new RegExp(pat[p].url);
+            if(pat[p].type == void 0){
+                alert("type Required on URL:" + pat[p].url);
+            }
+            if(pat[p].id == void 0){
+                alert("id Required on URL:" + pat[p].url);
+            }
+        }
     } catch (e){
-        alert("JSON Error:" + e.message);
+        alert("Error:" + e.message);
     }
+        
     let setting = browser.storage.local.set({
         'pattern':pattern
     });

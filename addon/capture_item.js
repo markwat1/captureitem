@@ -75,12 +75,36 @@ function onKeyDown(e) {
             if(patterns[p].class_index){
                 class_index = patterns[p].class_index;
             }
-            png = patterns[p].png;
-            keyCode = patterns[p].keyCode;
-            shift = patterns[p].shift;
-            alt = patterns[p].alt;
-            ctrl = patterns[p].ctrl;
-            meta = patterns[p].meta;
+            if(patterns[p].png){
+                png = patterns[p].png;
+            }else{
+                png = "Capture.png";
+            }
+            if(patterns[p].keyCode){
+                keyCode = patterns[p].keyCode
+            }else{
+                keyCode = 'Escape';
+            }
+            if(patterns[p].shift != void 0){
+                shift = patterns[p].shift;
+            }else{
+                shift = false;
+            }
+            if(patterns[p].alt != void 0){
+                alt = patterns[p].alt;
+            }else{
+                alt = false;
+            }
+            if(patterns[p].ctrl != void 0){
+                ctrl = patterns[p].ctrl;
+            }else{
+                ctrl = false;
+            }
+            if(patterns[p].meta != void 0){
+                meta = patterns[p].meta;
+            }else{
+                meta = false;
+            }
             if( e.code == keyCode &&
                 e.shiftKey == shift &&
                 e.altKey == alt &&
