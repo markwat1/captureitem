@@ -1,6 +1,7 @@
 //console.log("Start content script");
+// Global parameters
+//console.log("Start Loding");
 let patterns;
-let png = 'capture.png';
 let defaultPatterns =
 '{\n\
   "patterns":[\n\
@@ -18,11 +19,19 @@ let defaultPatterns =
       }\n\
   ]\n\
 }\n';
+// Default Parameters
+let png = 'capture.png';
+let findBy = '';
+let id = '';
+let keyCode = 'Escape';
+let shift = true;
+let alt = false;
+let ctrl = false;
+let meta = false;
+let class_index = 0;
 
-window.addEventListener("load", onLoaded);
-window.addEventListener("keydown", onKeyDown);
-
-//document.body.style.border = "5px solid red";
+// set function when loaded
+window.addEventListener("popstate", onUrlChanged);
 browser.runtime.onMessage.addListener(messageListener);
 var getting = browser.storage.local.get('pattern');
 getting.then((res) => {
@@ -32,7 +41,10 @@ getting.then((res) => {
     }
     let pat = JSON.parse(pattern);
     patterns = pat.patterns;
+    onUrlChanged();
 });
+//console.log("End of initial");
+// End of Initial code
 
 function messageListener(message){
     if(message.type == "image"){
@@ -59,18 +71,14 @@ function getOffset(elem){
     return {left:offsetX,top:offsetY};
 }
 
-function onKeyDown(e) {
-    let findBy = '';
-    let id = '';
-    let keyCode = 'Escape';
-    let shift = true;
-    let alt = false;
-    let ctrl = false;
-    let meta = false;
-    let class_index = 0;
+function onUrlChanged(){
+//    console.log("url changed: " + document.URL);
     for(var p in patterns){
         let urlpat = new RegExp(patterns[p].url);
         if(urlpat.test(document.URL)){
+//            console.log("URL Match: " + document.URL);
+//            document.body.style.border = "5px solid red";
+            window.addEventListener("keydown", onKeyDown);
             findBy = patterns[p].type;
             id = patterns[p].id;
             if(patterns[p].class_index){
@@ -106,42 +114,41 @@ function onKeyDown(e) {
             }else{
                 meta = false;
             }
-            if( e.code == keyCode &&
-                e.shiftKey == shift &&
-                e.altKey == alt &&
-                e.ctrlKey == ctrl &&
-                e.metaKey == meta
-              ) {
-                let elem;
-                switch(findBy){
-                case 'id':
-                    elem = document.getElementById(id);
-                    break;
-                case 'class':
-                    elem = document.getElementsByClassName(id)[class_index];
-                    break;
-                }
-                let offset = getOffset(elem);
-                let width = elem.offsetWidth;
-                if(width == 0){
-                    width = 500;
-                }
-                let height = elem.offsetHeight;
-                if(elem.offsetHeight == 0){
-                    height = 500;
-                }
-                var sending = browser.runtime.sendMessage({rect:{x:offset.left,y:offset.top,width:width,height:height}});
-                sending.then(messageListener, onError);
-                break;
-            }
+            break;
         }
+    }
+}
+
+function onKeyDown(e) {
+    if( e.code == keyCode &&
+        e.shiftKey == shift &&
+        e.altKey == alt &&
+        e.ctrlKey == ctrl &&
+        e.metaKey == meta
+      ) {
+        let elem;
+        switch(findBy){
+        case 'id':
+            elem = document.getElementById(id);
+            break;
+        case 'class':
+            elem = document.getElementsByClassName(id)[class_index];
+            break;
+        }
+        let offset = getOffset(elem);
+        let width = elem.offsetWidth;
+        if(width == 0){
+            width = 500;
+        }
+        let height = elem.offsetHeight;
+        if(elem.offsetHeight == 0){
+            height = 500;
+        }
+        var sending = browser.runtime.sendMessage({rect:{x:offset.left,y:offset.top,width:width,height:height}});
+        sending.then(messageListener, onError);
     }
 }
 
 function onError(error) {
     console.log(`Error: ${error}`);
-}
-
-function onLoaded(event){
-    console.log("loaded: " + document.URL);
 }
