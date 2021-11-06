@@ -19,6 +19,7 @@ let defaultPatterns =
   ]\n\
 }\n';
 
+window.addEventListener("load", onLoaded);
 window.addEventListener("keydown", onKeyDown);
 
 //document.body.style.border = "5px solid red";
@@ -139,4 +140,8 @@ function onKeyDown(e) {
 
 function onError(error) {
     console.log(`Error: ${error}`);
+}
+
+function onLoaded(event){
+    console.log("loaded: " + document.URL);
 }
