@@ -46,6 +46,18 @@ let defaultPatterns =
           "alt":false,\n\
           "ctrl":false,\n\
           "meta":false\n\
+      },\n\
+      {\n\
+          "url":"https://www.mozilla.org/ja/",\n\
+          "type":"class",\n\
+          "id":"mzp-c-billboard mzp-l-billboard-right",\n\
+          "class_index":0,\n\
+          "png":"firefox2.png",\n\
+          "keyCode":"Escape",\n\
+          "shift":false,\n\
+          "alt":false,\n\
+          "ctrl":true,\n\
+          "meta":false\n\
       }\n\
   ]\n\
 }\n';

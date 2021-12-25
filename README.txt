@@ -21,10 +21,10 @@ pattern.json
           "id":"ctaCanvas",
           "class_index": 0,
           "png":"google.png",
-          "keyCode":"Escape",
-          "shift":true,
+          "keyCode":"Digit1",
+          "shift":false,
           "alt":false,
-          "ctrl":false,
+          "ctrl":true,
           "meta":false
       }
   ]
@@ -37,3 +37,10 @@ class_index: index of elements matched by class
 png: save file name(png)
 keyCode: trigger key
 shift,alt,ctrl,meta: required modifier
+
+KeyCode Sample
+Escape Key : "Escape"
+Num Key 1 : "Digit1"
+Alfphabet Key a : "KeyA"
+Tab Key : "Tab"
+Space Key : "Space"
