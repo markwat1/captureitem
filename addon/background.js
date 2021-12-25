@@ -13,7 +13,7 @@ function onError(error) {
 function notify(message, sender, sendResponse){
     tabId = sender.tab.id;
     responseFunc = sendResponse;
-    var capturing = browser.tabs.captureTab(message);
+    var capturing = browser.tabs.captureVisibleTab(message);
     capturing.then(onCaptured, onError);
     sendResponse({message:"Capturing"});
 }
