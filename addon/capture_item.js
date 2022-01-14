@@ -1,7 +1,19 @@
+/*
+  capture item on page
+  copyright (c) 2021-22 Mark(Watanabe,Masayuki)
+  addon for Firefox
+*/
+
 //console.log("Start content script");
 // Global parameters
 //console.log("Start Loding");
 let patterns;
+/*
+  Default Patterns
+  get 2 items on Mozilla page
+  shift+Escape : image 1
+  control+Escape : image 2
+*/
 let defaultPatterns =
 '{\n\
   "patterns":[\n\
@@ -31,8 +43,12 @@ let defaultPatterns =
       }\n\
   ]\n\
 }\n';
-// Default Parameters
+/*
+  Preference class
+  capture setting preference
+*/
 class Preference {
+// Default Parameters
     png = 'capture.png';
     findBy = '';
     id = '';
@@ -54,11 +70,22 @@ class Preference {
         this.class_index = class_index;
     }
 }
+/*
+  Effective Preferences on this page.
+*/
+
 let preferences = new Array(0);
 
 // set function when loaded
 window.addEventListener("popstate", onUrlChanged);
+/* 
+   register Message Listener
+*/
 browser.runtime.onMessage.addListener(messageListener);
+
+/*
+  get preferences from browser local storage
+*/
 var getting = browser.storage.local.get('pattern');
 getting.then((res) => {
     let pattern = res.pattern;
@@ -70,9 +97,19 @@ getting.then((res) => {
     onUrlChanged();
 });
 //console.log("End of initial");
+
 // End of Initial code
+
+/* 
+   Effective Image Name
+   overwrite from onkeydown function
+*/
+
 let effectivePng = "image.png";
 
+/*
+  message listener called on capture image executed in background 
+*/
 function messageListener(message){
     if(message.type == "image"){
 //        console.log("Captured:",message);
@@ -87,6 +124,9 @@ function messageListener(message){
     }
 }
 
+/*
+  calc item offset from topleft of frame.
+*/
 function getOffset(elem){
     let offsetX = 0;
     let offsetY = 0;
@@ -98,6 +138,10 @@ function getOffset(elem){
     }
     return {left:offsetX,top:offsetY};
 }
+/*
+  called on url is changed
+  reload preference and setup keydown event
+*/
 
 function onUrlChanged(){
     //    console.log("url changed: " + document.URL);
@@ -147,7 +191,10 @@ function onUrlChanged(){
         }
     }
 }
-
+/*
+  called on key down 
+  calc frame offset and send message what execute capture to background
+*/
 function onKeyDown(e) {
 //    console.log("keycode:",e.code);
     preferences.forEach(function(p){
@@ -181,6 +228,11 @@ function onKeyDown(e) {
         }
     })
 }
+
+/*
+  called on error
+  logging only
+*/
 
 function onError(error) {
     console.log(`Error: ${error}`);
