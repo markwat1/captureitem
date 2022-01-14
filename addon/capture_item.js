@@ -100,13 +100,14 @@ function getOffset(elem){
 }
 
 function onUrlChanged(){
-//    console.log("url changed: " + document.URL);
+    //    console.log("url changed: " + document.URL);
+    preferences.splice(0);
     for(var p in patterns){
         let urlpat = new RegExp(patterns[p].url);
         if(urlpat.test(document.URL)){
 //            console.log("URL Match: " + document.URL);
             //            document.body.style.border = "5px solid red";
-            window.removeEventListener("keydown", onKeyDown);
+//            window.removeEventListener("keydown", onKeyDown);
             window.addEventListener("keydown", onKeyDown);
             let findBy = patterns[p].type;
             let id = patterns[p].id;
