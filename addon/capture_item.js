@@ -4,7 +4,7 @@
   addon for Firefox
 */
 
-//console.log("Start content script");
+
 // Global parameters
 //console.log("Start Loding");
 let patterns;

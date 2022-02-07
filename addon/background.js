@@ -1,3 +1,6 @@
+/*
+  background process for capture_item
+*/
 browser.runtime.onMessage.addListener(notify);
 
 let tabId = 0;
