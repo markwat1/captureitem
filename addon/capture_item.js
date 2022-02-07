@@ -111,15 +111,24 @@ let effectivePng = "image.png";
   message listener called on capture image executed in background 
 */
 function messageListener(message){
-    if(message.type == "image"){
-//        console.log("Captured:",message);
-        let elem = document.createElement("a");
-        elem.href = message.uri;
-        elem.download = effectivePng;
-        elem.click();
-    }else{
-        if(message.type == "error"){
+    if(message){
+//        console.log("Message:", message);
+        if(message.type == "image"){
+            //        console.log("Captured:",message);
+            let elem = document.createElement("a");
+            elem.href = message.uri;
+            elem.download = effectivePng;
+            elem.click();
+        }else if(message.type == "error"){
             console.log(`Message: ${message.message}`);
+        }else if(message.type == "notfound"){
+//            console.log(`Message: ${message.message}`);
+        }else if(message.type = "title"){
+//            console.log(`bookmark title: ${message.message}`);
+            var png = message.message.replace(/ /g,'_').concat('.png');
+            preferences.forEach(function(p){
+                p.png = png;
+            });
         }
     }
 }
@@ -189,6 +198,10 @@ function onUrlChanged(){
             }
             preferences.push(new Preference(png,findBy,id,keyCode,shift,alt,ctrl,meta,class_index));
         }
+    }
+    if(preferences.length > 0){
+        var sending = browser.runtime.sendMessage({url:document.URL});
+        sending.then(messageListener, onError);
     }
 }
 /*
