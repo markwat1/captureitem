@@ -1,0 +1,33 @@
+<script type="text/javascript">
+  $('button#add').click(function(){
+      var tr_form = '' +
+          '<tr>' +
+          '<td><input type="text" name="text_1[]"></td>' +
+          '<td><input type="text" name="text_2[]"></td>' +
+          '</tr>';
+      $(tr_form).appendTo($('table > tbody'));
+  });
+</script>
+
+<form action="data.php" method="post" enctype="multipart/form-data"> 
+<table>
+  <thead>
+    <tr>
+      <th>材料</th>
+      <th>数量</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><input type="text" name="text_1[]"></td>
+      <td><input type="text" name="text_2[]"></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td ><button id="add" type="button">追加</button></td>
+    </tr>
+  </tfoot>
+</table>
+<input type="submit" name="send" value="送信">
+</form>
